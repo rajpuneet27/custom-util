@@ -1,28 +1,65 @@
 <div class="table-container">
-  <table class="custom-scroll">
-    <tr>
-      <th *ngFor="let col of columnReference" ngClass="{{col.columnWidth}}">{{col.columnHeader}}
-        <img *ngIf="col.filterIcon" (click)="openFilterPanel(getColumnHeader(col.columnHeader))" class="menu--column" src="assets/icons/hamburger.svg" alt="Menu">
-      </th>
-    </tr>
-    <tr *ngFor="let item of tableData">
-      <td class="justify-center">{{ item.id }}</td>
-      <td>{{ item.company }}</td>
-      <td>{{ item.contact }}</td>
-      <td>{{ item.country }}</td>
-    </tr>
+  <table class="custom-scroll-1">
+      <tr class="border--header">
+        <th *ngFor="let col of columnReference" ngClass="{{col.columnWidth}}">{{col.columnHeader}}
+          <img *ngIf="col.filterIcon" (click)="openFilterPanel(getColumnHeader(col.columnHeader))" class="menu--column" src="assets/icons/filter.svg" alt="Menu">
+        </th>
+      </tr>
   </table>
+  <div class="data-container">
+    <table class="custom-scroll">
+      <tr *ngFor="let item of tableData;">
+        <td class="xs justify-center">{{ item.id }}</td>
+        <td>{{ item.company }}</td>
+        <td>{{ item.contact }}</td>
+        <td>{{ item.country }}</td>
+      </tr>
+    </table>
+  </div>
 </div>
-<div *ngIf="filterPanel" class="filter--panel">
-  <label class="filter--label" for="column">Filter Panel</label>
-  <select name="Operator">
-    <option value="" disabled selected>Filter Type</option>
-    <option value="Contains">Contains</option>
-    <option value="Equal">Equal</option>
-    <option value="Not Equal">Not Equal</option>
-    <option value="Includes">Includes</option>
-  </select>
-  <input class="filter--search" placeholder="Filter Input" type="text" name="Search" id="filterSearch" >
-
-  <input class="filter--search--button" type="button" value="Apply" id="filterSearchButton">
+<!-- <div class="table--footer"></div> -->
+<div *ngIf="filterPanel" class="modal" id="modal-one" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-header">
+        <h2>Filter Panel</h2>
+        <a href="#modal-one" class="btn-close" aria-hidden="true" (click)="closeFilter()">×</a>
+      </div>
+      <!-- <div class="modal-body">
+        <select name="Operator">
+          <option value="" disabled selected>Filter Type</option>
+          <option value="Contains">Contains</option>
+          <option value="Equal">Equal</option>
+          <option value="Not Equal">Not Equal</option>
+          <option value="Includes">Includes</option>
+        </select>
+        <input class="filter--search" (mousedown)="filterList()" (keyup)="filterListOnKeyPress($event)" [value]="inputValue" 
+                                          placeholder="Filter Input" type="text" name="Search" id="filterSearch" autocomplete="off">
+        <ul *ngIf="showFilterList" class="filter--list--container">
+          <li class="filter--list" (click)="setFilterInput($event)" *ngFor="let item of uniqueValuesOnSearch">{{item}}</li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <a href="#modal-one" class="btn filter--search--button" id="filterSearchButton" (click)="applyFilter()">Apply</a>
+      </div> -->
+      <form id="filterForm">
+        <div class="modal-body">
+          <select name="Operator" id="Operator" required>
+            <option value="" disabled selected>Filter Type</option>
+            <option value="Contains">Contains</option>
+            <option value="Equal">Equal</option>
+            <option value="Not Equal">Not Equal</option>
+            <option value="Includes">Includes</option>
+          </select>
+          <input class="filter--search" (mousedown)="filterList()" (keyup)="filterListOnKeyPress($event)" [value]="inputValue" 
+                                             placeholder="Filter Input" type="text" name="Search" id="filterSearch" autocomplete="off" required>
+          <ul *ngIf="showFilterList" class="filter--list--container">
+            <li class="filter--list" (click)="setFilterInput($event)" *ngFor="let item of uniqueValuesOnSearch">{{item}}</li>
+          </ul>
+        </div>
+        <div class="modal-footer">
+          <a href="" class="reset--link">Reset</a>
+          <button type="button" class="btn" id="filterSearchButton" (click)="applyFilter()">Apply</button>
+        </div>
+      </form>
+  </div>
 </div>
